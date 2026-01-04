@@ -1,0 +1,11 @@
+StudentID,Name,Scores,Attendance,Pass/Fail
+1,Alice,78,90,Pass
+2,Bob,45,60,Fail
+3,Charlie,82,95,Pass
+4,Ali,67,75,Pass
+5,Abdullah,87,87,Fail
+6,Umer,56,56,Fail
+7,Rafay,76,99,Pass
+8,Ahmad,89,60,Pass
+9,Adam,45,76,Fail
+10,Mira,90,67,Pass
