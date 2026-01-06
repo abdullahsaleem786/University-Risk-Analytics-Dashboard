@@ -6,5 +6,3 @@ Identify those students that are at risk of failing and automate reportingfor un
 Tools you’ll use (Python, Pandas, Streamlit, Plotly)
 
 Status: “In Progress”
-
-(Optional) Screenshot placeholder or GIF
