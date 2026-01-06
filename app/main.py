@@ -24,3 +24,14 @@ st.write(f"Failed: {failed}")
 #Bar Chart for Pass/Fail
 st.subheader("Pass/Fail Distribution")
 st.bar_chart(df['Pass/Fail'].value_counts())
+
+#Day-3
+#Filtering
+# Example: filter by score
+score_threshold = st.slider("Minimum Score", min_value=int(df['Scores'].min()), max_value=int(df['Scores'].max()), value=int(df['Scores'].min()))
+filtered_df = df[df['Scores'] >= score_threshold]
+
+st.subheader(f"Students with Score ≥ {score_threshold}")
+st.dataframe(filtered_df)
+
+
