@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import plotly.express as px
 st.title("University Risk Analytics Dashboard")
 
 #load Data
@@ -34,4 +35,7 @@ filtered_df = df[df['Scores'] >= score_threshold]
 st.subheader(f"Students with Score ≥ {score_threshold}")
 st.dataframe(filtered_df)
 
+#Histogram
+fig2=px.histogram(df,x='Scores',nbins=10,title='Score Distribution')
+st.plotly_chart(fig2)
 
