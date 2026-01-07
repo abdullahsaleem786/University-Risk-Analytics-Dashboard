@@ -47,3 +47,7 @@ st.subheader("Pass/Fail Distribution (Filtering)")
 fig=px.pie(filtered_df,names='Pass/Fail',title='Pass/Fail Percentage')
 st.plotly_chart(fig)
 
+#Average Score Metric
+st.subheader("Key Stats (Filtered)")
+avg_score=filtered_df['Scores'].mean()
+st.write(f"Average Score: {avg_score:.2f}")
