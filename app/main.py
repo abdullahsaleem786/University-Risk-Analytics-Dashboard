@@ -39,3 +39,11 @@ st.dataframe(filtered_df)
 fig2=px.histogram(df,x='Scores',nbins=10,title='Score Distribution')
 st.plotly_chart(fig2)
 
+#Day-4:We already have histogram and filtering.
+#Pie chart for Pass/Fail
+#Dynamic pie chart for Pass/Fail based on filtered data
+
+st.subheader("Pass/Fail Distribution (Filtering)")
+fig=px.pie(filtered_df,names='Pass/Fail',title='Pass/Fail Percentage')
+st.plotly_chart(fig)
+
