@@ -51,3 +51,45 @@ st.plotly_chart(fig)
 st.subheader("Key Stats (Filtered)")
 avg_score=filtered_df['Scores'].mean()
 st.write(f"Average Score: {avg_score:.2f}")
+
+#Day-5 Risk Category
+risk_threshold = st.number_input(
+    "High Risk Threshold",
+    min_value=0,
+    max_value=100,
+    value=45,
+    step=1
+)
+
+def risk_category(score, threshold):
+    if score < threshold:
+        return "High Risk"
+    elif score < threshold + 20:
+        return "Medium Risk"
+    else:
+        return "Low Risk"
+
+df["Risk Level"] = df["Scores"].apply(lambda x: risk_category(x, risk_threshold))
+filtered_df = df[df["Scores"] >= score_threshold]
+
+
+
+st.subheader("Risk Level Distribution")
+risk_counts = filtered_df["Risk Level"].value_counts()
+
+st.bar_chart(risk_counts)
+
+st.subheader("Risk Summary")
+st.write("High Risk Threshold:", risk_threshold)
+
+high_risk_students = filtered_df[filtered_df["Risk Level"] == "High Risk"]
+st.write(f"High Risk Students: {high_risk_students.shape[0]}")
+
+#High risk students
+st.subheader("High Risk Students")
+high_risk_std=filtered_df[filtered_df['Risk Level']=='High Risk']
+st.dataframe(high_risk_std)
+
+#High Risk KPI
+high_risk_counts=high_risk_std.shape[0]
+st.write(f"High Risk Students: {high_risk_counts}")
