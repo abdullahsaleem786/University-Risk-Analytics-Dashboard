@@ -60,16 +60,32 @@ risk_threshold = st.number_input(
     value=45,
     step=1
 )
+#Day-6
+#Add Attendance Threshold
+attendance_threshold=st.number_input(
+    "Low Attendance Threshold %",
+    min_value=0,
+    max_value=100,
+    value=65,
+    step=1
+)
+#Day-5&6
+# 2️⃣ Upgrade Risk Logic (replace function only)
 
-def risk_category(score, threshold):
-    if score < threshold:
+def risk_category(score, attendance, score_th, att_th):
+    if score < score_th or attendance < att_th:
         return "High Risk"
-    elif score < threshold + 20:
+    elif score < score_th + 15 or attendance < att_th + 10:
         return "Medium Risk"
     else:
         return "Low Risk"
 
-df["Risk Level"] = df["Scores"].apply(lambda x: risk_category(x, risk_threshold))
+
+df["Risk Level"] = df.apply(
+    lambda x: risk_category(x["Scores"], x["Attendance"], risk_threshold, attendance_threshold),
+    axis=1
+)
+
 filtered_df = df[df["Scores"] >= score_threshold]
 
 
@@ -85,11 +101,18 @@ st.write("High Risk Threshold:", risk_threshold)
 high_risk_students = filtered_df[filtered_df["Risk Level"] == "High Risk"]
 st.write(f"High Risk Students: {high_risk_students.shape[0]}")
 
-#High risk students
-st.subheader("High Risk Students")
-high_risk_std=filtered_df[filtered_df['Risk Level']=='High Risk']
-st.dataframe(high_risk_std)
+# 4️⃣ Add Top-5 At-Risk Students Table
 
-#High Risk KPI
-high_risk_counts=high_risk_std.shape[0]
-st.write(f"High Risk Students: {high_risk_counts}")
+# Place after your risk summary:
+
+st.subheader("Top 5 At-Risk Students")
+
+top_risk = df[df["Risk Level"] == "High Risk"] \
+            .sort_values(by=["Scores", "Attendance"]) \
+            .head(5)
+
+st.dataframe(top_risk)
+
+
+
+
