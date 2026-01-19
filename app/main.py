@@ -36,8 +36,8 @@ st.subheader(f"Students with Score ≥ {score_threshold}")
 st.dataframe(filtered_df)
 
 #Histogram
-fig2=px.histogram(df,x='Scores',nbins=10,title='Score Distribution')
-st.plotly_chart(fig2)
+
+
 
 #Day-4:We already have histogram and filtering.
 #Pie chart for Pass/Fail
@@ -87,7 +87,14 @@ df["Risk Level"] = df.apply(
 )
 
 filtered_df = df[df["Scores"] >= score_threshold]
-
+fig2 = px.histogram(
+    filtered_df,
+    x="Scores",
+    color="Risk Level",
+    nbins=10,
+    title="Score Distribution by Risk Level (Filtered)"
+)
+st.plotly_chart(fig2)
 
 
 st.subheader("Risk Level Distribution")
@@ -105,13 +112,41 @@ st.write(f"High Risk Students: {high_risk_students.shape[0]}")
 
 # Place after your risk summary:
 
-st.subheader("Top 5 At-Risk Students")
+st.subheader("Top 5 At-Risk Students (Filtered)")
 
-top_risk = df[df["Risk Level"] == "High Risk"] \
-            .sort_values(by=["Scores", "Attendance"]) \
-            .head(5)
+top_risk = filtered_df[filtered_df["Risk Level"] == "High Risk"] \
+    .sort_values(by=["Scores", "Attendance"]) \
+    .head(5)
 
 st.dataframe(top_risk)
+#Day-7 due to exams I delayed it and now I am back 19-01-2026. Monday
+st.subheader("Export High Risk Students")
+
+export_df = filtered_df[filtered_df["Risk Level"] == "High Risk"]
+
+csv = export_df.to_csv(index=False).encode("utf-8")
+
+st.download_button(
+    label="Download High Risk Students CSV",
+    data=csv,
+    file_name="high_risk_students.csv",
+    mime="text/csv"
+)
+
+st.subheader("🚨 Critical Risk Alerts")
+
+critical_df = filtered_df[
+    (filtered_df["Scores"] < risk_threshold - 10) |
+    (filtered_df["Attendance"] < attendance_threshold - 10)
+]
+
+if critical_df.shape[0] == 0:
+    st.success("No critical-risk students right now 🎉")
+else:
+    st.error(f"{critical_df.shape[0]} students need immediate intervention!")
+    st.dataframe(critical_df)
+
+
 
 
 
