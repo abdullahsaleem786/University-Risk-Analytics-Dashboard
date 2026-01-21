@@ -119,7 +119,7 @@ top_risk = filtered_df[filtered_df["Risk Level"] == "High Risk"] \
     .head(5)
 
 st.dataframe(top_risk)
-#Day-7 due to exams I delayed it and now I am back 19-01-2026. Monday
+#Day-7 due to exams I delayed it and now I am back 19-01-2026. Monday and Fix some errors Today of Histogram. 
 st.subheader("Export High Risk Students")
 
 export_df = filtered_df[filtered_df["Risk Level"] == "High Risk"]
@@ -145,6 +145,24 @@ if critical_df.shape[0] == 0:
 else:
     st.error(f"{critical_df.shape[0]} students need immediate intervention!")
     st.dataframe(critical_df)
+
+
+#Day-8
+# let's do some visulization
+#Scatter plot
+st.subheader("Scores vs Attendance (Risk Level)")
+
+fig_scatter = px.scatter(
+    filtered_df,
+    x="Attendance",
+    y="Scores",
+    color="Risk Level",
+    hover_data=["StudentID", "Name"],  
+    size="Scores",                     
+    title="Scores vs Attendance Colored by Risk Level"
+)
+
+st.plotly_chart(fig_scatter)
 
 
 
