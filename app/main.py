@@ -149,20 +149,36 @@ else:
 
 #Day-8
 # let's do some visulization
-#Scatter plot
-st.subheader("Scores vs Attendance (Risk Level)")
+# Filtered Data Table
+st.subheader(f"Students with Score ≥ {score_threshold}")
+st.dataframe(filtered_df)
 
+# --- Step 1: Scatter Plot ---
+st.subheader("Scores vs Attendance (Risk Level)")
 fig_scatter = px.scatter(
     filtered_df,
     x="Attendance",
     y="Scores",
     color="Risk Level",
-    hover_data=["StudentID", "Name"],  
-    size="Scores",                     
+    hover_data=["StudentID", "Name"],
+    size="Scores",
     title="Scores vs Attendance Colored by Risk Level"
 )
-
 st.plotly_chart(fig_scatter)
+
+# --- Step 2: Box Plot ---
+st.subheader("Score Distribution by Risk Level")
+fig_box = px.box(
+    filtered_df,
+    x="Risk Level",
+    y="Scores",
+    color="Risk Level",
+    points="all",
+    title="Score Distribution per Risk Level"
+)
+st.plotly_chart(fig_box)
+
+
 
 
 
