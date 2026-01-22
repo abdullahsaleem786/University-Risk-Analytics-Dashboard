@@ -178,6 +178,53 @@ fig_box = px.box(
 )
 st.plotly_chart(fig_box)
 
+# --- Day-9 Step 1: Attendance Distribution by Risk Level ---
+
+st.subheader("Attendance Distribution by Risk Level")
+
+fig_att = px.histogram(
+    filtered_df,
+    x="Attendance",
+    color="Risk Level",
+    nbins=10,
+    title="Attendance Distribution by Risk Level"
+)
+
+st.plotly_chart(fig_att)
+
+# --- Day-9 Step 2: Pass/Fail → Risk Level Sunburst ---
+
+st.subheader("Pass / Fail → Risk Level Breakdown")
+
+fig_sunburst = px.sunburst(
+    filtered_df,
+    path=["Pass/Fail", "Risk Level", "Name"],
+    values="Scores",
+    title="Student Risk Hierarchy"
+)
+
+st.plotly_chart(fig_sunburst)
+# --- Day-9 Step 3.1: Danger Score Calculation ---
+
+df["Danger Score"] = (
+    (risk_threshold - df["Scores"]).clip(lower=0) +
+    (attendance_threshold - df["Attendance"]).clip(lower=0)
+)
+# Recreate filtered_df so it includes Danger Score
+filtered_df = df[df["Scores"] >= score_threshold]
+
+# --- Day-9 Step 3.2: Priority Intervention List ---
+
+st.subheader("🚨 Priority Intervention List (Most Critical Students)")
+
+priority_df = filtered_df.sort_values(
+    by="Danger Score",
+    ascending=False
+).head(10)
+
+st.dataframe(priority_df)
+
+
 
 
 
