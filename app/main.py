@@ -192,7 +192,7 @@ fig_att = px.histogram(
 
 st.plotly_chart(fig_att)
 
-# --- Day-9 Step 2: Pass/Fail → Risk Level Sunburst ---
+#Step 2: Pass/Fail → Risk Level Sunburst ---
 
 st.subheader("Pass / Fail → Risk Level Breakdown")
 
@@ -204,7 +204,7 @@ fig_sunburst = px.sunburst(
 )
 
 st.plotly_chart(fig_sunburst)
-# --- Day-9 Step 3.1: Danger Score Calculation ---
+# Step 3.1: Danger Score Calculation ---
 
 df["Danger Score"] = (
     (risk_threshold - df["Scores"]).clip(lower=0) +
@@ -213,7 +213,7 @@ df["Danger Score"] = (
 # Recreate filtered_df so it includes Danger Score
 filtered_df = df[df["Scores"] >= score_threshold]
 
-# --- Day-9 Step 3.2: Priority Intervention List ---
+# Step 3.2: Priority Intervention List ---
 
 st.subheader("🚨 Priority Intervention List (Most Critical Students)")
 
@@ -224,6 +224,38 @@ priority_df = filtered_df.sort_values(
 
 st.dataframe(priority_df)
 
+#Day-10
+st.subheader("Score & Attendance Trends by Risk Level")
+
+fig_trend = px.line(
+    filtered_df.sort_values(by="Scores"),  # sort to make trend line smooth
+    x="StudentID",
+    y=["Scores", "Attendance"],
+    color="Risk Level",
+    markers=True,
+    title="Student Scores & Attendance Trends"
+)
+
+st.plotly_chart(fig_trend)
+
+
+st.subheader("Early-Warning Projection")
+
+future_risk_df = filtered_df.copy()
+future_risk_df["Projected Scores"] = future_risk_df["Scores"] * 0.95  # assume 5% drop
+future_risk_df["Projected Attendance"] = future_risk_df["Attendance"] * 0.95
+
+# Recalculate projected danger score
+future_risk_df["Projected Danger Score"] = (
+    (risk_threshold - future_risk_df["Projected Scores"]).clip(lower=0) +
+    (attendance_threshold - future_risk_df["Projected Attendance"]).clip(lower=0)
+)
+
+# Filter for students who will cross high-risk threshold
+future_high_risk = future_risk_df[future_risk_df["Projected Danger Score"] > 10]
+
+st.write(f"{future_high_risk.shape[0]} students may become high risk soon:")
+st.dataframe(future_high_risk.sort_values(by="Projected Danger Score", ascending=False).head(10))
 
 
 
