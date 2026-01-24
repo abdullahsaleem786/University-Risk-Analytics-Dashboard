@@ -1,6 +1,12 @@
 import pandas as pd
 import streamlit as st
 import plotly.express as px
+#Day-11
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix
+import numpy as np
+
 st.title("University Risk Analytics Dashboard")
 
 #load Data
@@ -257,12 +263,6 @@ future_high_risk = future_risk_df[future_risk_df["Projected Danger Score"] > 10]
 st.write(f"{future_high_risk.shape[0]} students may become high risk soon:")
 st.dataframe(future_high_risk.sort_values(by="Projected Danger Score", ascending=False).head(10))
 
-
-#Day-11
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, confusion_matrix
-import numpy as np
 
 st.subheader("Machine Learning: Predict High-Risk Students")
 # After creating High_Risk_Flag
