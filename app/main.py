@@ -258,6 +258,76 @@ st.write(f"{future_high_risk.shape[0]} students may become high risk soon:")
 st.dataframe(future_high_risk.sort_values(by="Projected Danger Score", ascending=False).head(10))
 
 
+#Day-11
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix
+import numpy as np
+
+st.subheader("Machine Learning: Predict High-Risk Students")
+# After creating High_Risk_Flag
+# 1️⃣ Create target variables / ML columns first
+df["High_Risk_Flag"] = np.where(df["Risk Level"] == "High Risk", 1, 0)
+
+# 2️⃣ Predict with ML model
+X = df[["Scores", "Attendance"]]
+y = df["High_Risk_Flag"]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+df["Predicted_High_Risk"] = model.predict(df[["Scores", "Attendance"]])
+
+# 3️⃣ Filter AFTER all new columns are added
+filtered_df = df[df["Scores"] >= score_threshold]
+
+# Create target variable: 1 if High Risk, 0 otherwise
+df["High_Risk_Flag"] = np.where(df["Risk Level"] == "High Risk", 1, 0)
+
+# Features
+X = df[["Scores", "Attendance"]]
+y = df["High_Risk_Flag"]
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+
+st.write(f"Model Accuracy: {accuracy*100:.2f}%")
+
+# 🔹 Step 3: Predict Risk for Filtered Students
+# Predict risk for current filtered_df
+filtered_df["Predicted_High_Risk"] = model.predict(filtered_df[["Scores", "Attendance"]])
+
+st.subheader("Predicted High-Risk Students (ML Model)")
+predicted_high_risk = filtered_df[filtered_df["Predicted_High_Risk"] == 1]
+st.dataframe(predicted_high_risk.sort_values(by=["Scores", "Attendance"]).head(10))
+
+#Step#4
+st.subheader("Predicted vs Actual High-Risk Students")
+
+fig_pred = px.scatter(
+    filtered_df,
+    x="Attendance",
+    y="Scores",
+    color="Predicted_High_Risk",
+    symbol="High_Risk_Flag",
+    hover_data=["Name", "StudentID"],
+    title="Predicted vs Actual High-Risk Students"
+)
+
+st.plotly_chart(fig_pred)
+
+
+
 
 
 
