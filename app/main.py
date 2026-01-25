@@ -327,10 +327,70 @@ fig_pred = px.scatter(
 st.plotly_chart(fig_pred)
 
 
+# --- Day-11: ML-based High-Risk Prediction with Heatmap ---
+st.subheader("Machine Learning: Predict High-Risk Students")
 
+# Safe import
+try:
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score
+    import numpy as np
+    sklearn_installed = True
+except ModuleNotFoundError:
+    st.error("scikit-learn not installed. Run `pip install scikit-learn`")
+    sklearn_installed = False
 
+if sklearn_installed:
+    # 1️⃣ Create target column: High Risk = 1, else 0
+    df["High_Risk_Flag"] = np.where(df["Risk Level"] == "High Risk", 1, 0)
 
+    # 2️⃣ Train Logistic Regression Model
+    X = df[["Scores", "Attendance"]]
+    y = df["High_Risk_Flag"]
 
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
 
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    st.write(f"Model Accuracy: {accuracy*100:.2f}%")
 
+    # 3️⃣ Predict High Risk for all students
+    df["Predicted_High_Risk"] = model.predict(df[["Scores", "Attendance"]])
 
+    # 4️⃣ Filter students above score threshold
+    filtered_df = df[df["Scores"] >= score_threshold]
+
+    # 5️⃣ Show top predicted high-risk students
+    st.subheader("Predicted High-Risk Students (ML Model)")
+    predicted_high_risk = filtered_df[filtered_df["Predicted_High_Risk"] == 1]
+    st.dataframe(predicted_high_risk.sort_values(by=["Scores", "Attendance"]).head(10))
+
+    # 6️⃣ Scatter Plot: Predicted vs Actual
+    st.subheader("Predicted vs Actual High-Risk Students")
+    fig_pred = px.scatter(
+        filtered_df,
+        x="Attendance",
+        y="Scores",
+        color="Predicted_High_Risk",
+        symbol="High_Risk_Flag",
+        hover_data=["Name", "StudentID"],
+        title="Predicted vs Actual High-Risk Students"
+    )
+    st.plotly_chart(fig_pred, key="fig_pred_day11_ml")
+
+    # 7️⃣ New Feature: Heatmap of Danger Score
+    st.subheader("Heatmap: Danger Score Intensity")
+    fig_heatmap = px.density_heatmap(
+        filtered_df,
+        x="Attendance",
+        y="Scores",
+        z="Danger Score",
+        color_continuous_scale="RdYlGn_r",
+        nbinsx=20,
+        nbinsy=20,
+        title="Danger Score Heatmap (Higher = More Risk)"
+    )
+    st.plotly_chart(fig_heatmap, key="fig_heatmap_day11")
