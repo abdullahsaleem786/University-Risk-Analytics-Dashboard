@@ -394,3 +394,32 @@ if sklearn_installed:
         title="Danger Score Heatmap (Higher = More Risk)"
     )
     st.plotly_chart(fig_heatmap, key="fig_heatmap_day11")
+
+# --- Day-12: Student Risk Drill-Down ---
+st.subheader("Student Risk Drill-Down")
+
+# Select a student from the filtered dataframe
+student_options = filtered_df["Name"].tolist()
+selected_student = st.selectbox("Select a Student to View Details", student_options)
+
+# Filter data for selected student
+student_data = filtered_df[filtered_df["Name"] == selected_student].iloc[0]
+
+# Display key metrics for the selected student
+st.write(f"**Student ID:** {student_data['StudentID']}")
+st.write(f"**Scores:** {student_data['Scores']}")
+st.write(f"**Attendance:** {student_data['Attendance']}%")
+st.write(f"**Pass/Fail:** {student_data['Pass/Fail']}")
+st.write(f"**Risk Level:** {student_data['Risk Level']}")
+st.write(f"**Danger Score:** {student_data['Danger Score']}")
+st.write(f"**Predicted High Risk (ML):** {student_data['Predicted_High_Risk']}")
+
+# Optional: Add a mini bar chart for scores & attendance
+fig_student = px.bar(
+    x=["Scores", "Attendance", "Danger Score"],
+    y=[student_data["Scores"], student_data["Attendance"], student_data["Danger Score"]],
+    color=["Scores", "Attendance", "Danger Score"],
+    text=[student_data["Scores"], student_data["Attendance"], student_data["Danger Score"]],
+    title=f"{selected_student} - Performance Overview"
+)
+st.plotly_chart(fig_student, key=f"student_bar_{selected_student}")
