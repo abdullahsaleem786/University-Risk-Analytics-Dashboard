@@ -423,3 +423,68 @@ fig_student = px.bar(
     title=f"{selected_student} - Performance Overview"
 )
 st.plotly_chart(fig_student, key=f"student_bar_{selected_student}")
+
+#Day-13
+# =========================
+# Day-13: Model Evaluation Dashboard
+# =========================
+
+from sklearn.metrics import classification_report
+
+st.subheader("📊 Day-13: Model Evaluation Dashboard")
+
+# Use test set predictions from Day-11
+y_test_pred = model.predict(X_test)
+
+# 1️⃣ Confusion Matrix
+st.subheader("Confusion Matrix (Actual vs Predicted)")
+
+cm = confusion_matrix(y_test, y_test_pred)
+
+cm_df = pd.DataFrame(
+    cm,
+    index=["Actual Low Risk", "Actual High Risk"],
+    columns=["Predicted Low Risk", "Predicted High Risk"]
+)
+
+st.dataframe(cm_df)
+
+# Heatmap style confusion matrix
+fig_cm = px.imshow(
+    cm,
+    text_auto=True,
+    color_continuous_scale="Blues",
+    labels=dict(x="Predicted", y="Actual", color="Count"),
+    x=["Low Risk", "High Risk"],
+    y=["Low Risk", "High Risk"],
+    title="Confusion Matrix Heatmap"
+)
+st.plotly_chart(fig_cm, key="fig_day13_confusion")
+
+# 2️⃣ Classification Report (Precision, Recall, F1-score)
+st.subheader("Classification Report")
+
+report = classification_report(y_test, y_test_pred, output_dict=True)
+report_df = pd.DataFrame(report).transpose()
+
+st.dataframe(report_df)
+
+# 3️⃣ Prediction Outcome Breakdown (TP, FP, TN, FN)
+
+tn, fp, fn, tp = cm.ravel()
+
+outcome_df = pd.DataFrame({
+    "Outcome": ["True Negative", "False Positive", "False Negative", "True Positive"],
+    "Count": [tn, fp, fn, tp]
+})
+
+st.subheader("Prediction Outcome Breakdown")
+
+fig_outcome = px.bar(
+    outcome_df,
+    x="Outcome",
+    y="Count",
+    title="Model Prediction Outcomes",
+)
+
+st.plotly_chart(fig_outcome, key="fig_day13_outcomes")
