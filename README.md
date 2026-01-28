@@ -68,13 +68,6 @@ University-Risk-Analytics-Dashboard/
 ├── README.md
 └── requirements.txt
 
-
-## ▶️ How to Run
-
-```bash
-pip install -r requirements.txt
-streamlit run app/main.py```
-
 🎯 Future Improvements
 
 Database integration (PostgreSQL / SQLite)
@@ -84,4 +77,11 @@ User roles (Admin / Faculty)
 Real-time data ingestion
 
 Advanced ML models
+
+## ▶️ How to Run
+
+```bash
+pip install -r requirements.txt
+streamlit run app/main.py```
+
 
