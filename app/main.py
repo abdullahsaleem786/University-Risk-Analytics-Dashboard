@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix
 import numpy as np
+from sklearn.metrics import confusion_matrix
 
 st.title("University Risk Analytics Dashboard")
 
@@ -439,13 +440,33 @@ y_test_pred = model.predict(X_test)
 # 1️⃣ Confusion Matrix
 st.subheader("Confusion Matrix (Actual vs Predicted)")
 
-cm = confusion_matrix(y_test, y_test_pred)
+
+# Compute confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+
+# Ensure it is always 2x2
+if cm.shape == (1,1):
+    # Only one class present in test
+    if y_test.iloc[0] == 0:
+        cm = [[cm[0,0], 0], [0, 0]]
+    else:
+        cm = [[0, 0], [0, cm[0,0]]]
+elif cm.shape == (1,2):
+    # Only first class present
+    cm = [[cm[0,0], cm[0,1]], [0, 0]]
+elif cm.shape == (2,1):
+    # Only second class present
+    cm = [[0,0], [cm[0,0], cm[1,0]]]
 
 cm_df = pd.DataFrame(
     cm,
     index=["Actual Low Risk", "Actual High Risk"],
     columns=["Predicted Low Risk", "Predicted High Risk"]
 )
+
+st.subheader("Confusion Matrix")
+st.dataframe(cm_df)
+
 
 st.dataframe(cm_df)
 
