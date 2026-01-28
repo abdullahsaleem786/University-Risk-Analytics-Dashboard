@@ -59,4 +59,29 @@ The system evolves step-by-step, simulating real-world analytics development ove
 ---
 
 ## 📈 Project Structure
+University-Risk-Analytics-Dashboard/
+│
+├── app/
+│ └── main.py
+├── data/
+│ └── sample.csv
+├── README.md
+└── requirements.txt
+
+
+## ▶️ How to Run
+
+```bash
+pip install -r requirements.txt
+streamlit run app/main.py```
+
+🎯 Future Improvements
+
+Database integration (PostgreSQL / SQLite)
+
+User roles (Admin / Faculty)
+
+Real-time data ingestion
+
+Advanced ML models
 
