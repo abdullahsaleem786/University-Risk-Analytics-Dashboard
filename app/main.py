@@ -488,3 +488,51 @@ fig_outcome = px.bar(
 )
 
 st.plotly_chart(fig_outcome, key="fig_day13_outcomes")
+
+
+# --- Day-14: Intervention Recommendation System ---
+
+st.subheader("🎯 Intervention Recommendations")
+
+def intervention_recommendation(score, attendance, risk):
+    if risk == "High Risk":
+        if score < risk_threshold and attendance < attendance_threshold:
+            return "🚨 Immediate Intervention"
+        elif score < risk_threshold:
+            return "📘 Academic Counseling"
+        elif attendance < attendance_threshold:
+            return "⚠️ Attendance Warning"
+    elif risk == "Medium Risk":
+        return "🧠 Monitor Progress"
+    else:
+        return "✅ No Action Needed"
+
+df["Recommended_Action"] = df.apply(
+    lambda x: intervention_recommendation(
+        x["Scores"],
+        x["Attendance"],
+        x["Risk Level"]
+    ),
+    axis=1
+)
+
+filtered_df = df[df["Scores"] >= score_threshold]
+
+# Show recommendations for High & Medium Risk students
+action_df = filtered_df[
+    filtered_df["Risk Level"].isin(["High Risk", "Medium Risk"])
+][[
+    "StudentID",
+    "Name",
+    "Scores",
+    "Attendance",
+    "Risk Level",
+    "Danger Score",
+    "Recommended_Action"
+]]
+
+st.dataframe(action_df.sort_values(by="Danger Score", ascending=False))
+st.subheader("Intervention Action Distribution")
+
+action_counts = action_df["Recommended_Action"].value_counts()
+st.bar_chart(action_counts)
