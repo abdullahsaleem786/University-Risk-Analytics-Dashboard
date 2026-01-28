@@ -1,8 +1,97 @@
-Project title:University Risk Analytics Dashboard
+# 🎓 University Risk Analytics Dashboard
 
-Short problem statement (why it matters)
-Identify those students that are at risk of failing and automate reportingfor universities.
+An end-to-end data analytics and decision-support system built with **Python, Streamlit, Plotly, and Machine Learning** to identify, analyze, and intervene in student academic risk.
 
-Tools you’ll use (Python, Pandas, Streamlit, Plotly)
+---
 
-Status: “In Progress”
+## 🚀 Project Overview
+
+This dashboard helps universities:
+- Monitor student performance and attendance
+- Identify high-risk students early
+- Predict future academic risk using Machine Learning
+- Recommend actionable interventions automatically
+
+The system evolves step-by-step, simulating real-world analytics development over multiple days.
+
+---
+
+## 🧠 Key Features
+
+### 📊 Data Analytics & Visualization
+- Student performance summary (Pass/Fail, Scores, Attendance)
+- Dynamic filtering by score thresholds
+- Risk-level distribution and trend analysis
+- Interactive charts (Scatter, Box, Histogram, Sunburst)
+
+### ⚠️ Risk Scoring System
+- Rule-based risk categorization (Low / Medium / High)
+- Customizable score and attendance thresholds
+- **Danger Score** to prioritize critical cases
+
+### 🔮 Forecasting & Early Warning
+- Projected score & attendance decline simulation
+- Identification of students likely to become high-risk
+
+### 🤖 Machine Learning
+- Logistic Regression model to predict high-risk students
+- Model evaluation with accuracy, confusion matrix, and metrics
+- Comparison of predicted vs actual risk
+
+### 🎯 Decision Automation (Final Stage)
+- Automated intervention recommendations:
+  - Academic counseling
+  - Attendance warning
+  - Immediate intervention
+  - Monitoring or no action
+
+---
+
+## 🛠 Tech Stack
+
+- **Python**
+- **Pandas & NumPy**
+- **Streamlit**
+- **Plotly**
+- **Scikit-learn**
+- **Git & GitHub**
+
+---
+
+## 📈 Project Structure
+
+University-Risk-Analytics-Dashboard/
+│
+├── app/
+│ └── main.py
+├── data/
+│ └── sample.csv
+├── README.md
+└── requirements.txt
+
+
+---
+🎯 Future Improvements
+Database integration (PostgreSQL / SQLite)
+
+User roles (Admin / Faculty)
+
+Real-time data ingestion
+
+Advanced ML models
+
+## ▶️ How to Run
+
+```bash
+pip install -r requirements.txt
+streamlit run app/main.py
+
+---
+
+## 📄 Project Case Study
+
+A detailed case study explaining the problem, solution design, analytics pipeline, machine learning model, and intervention system is available here:
+
+👉 Download Case Study PDF](University_Risk_Analytics_Case_Study.pdf)
+
+This document is intended for recruiters and interviewers who want a deeper technical and business understanding of the project.
